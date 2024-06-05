@@ -5,7 +5,7 @@
         </div>
         @auth
         <div class="flex space-x-4">
-            <a class="text-white font-semibold hover:text-gray-300">{{ Auth::user()->name }}</a>
+            <a href="{{ route('blog', ['id' => Auth::user()->id]) }}" class="text-white font-semibold hover:text-gray-300">{{ Auth::user()->name }}</a>
             <form method="POST" action="{{route('logout')}}">
                 @csrf
                 <a href="{{route('logout')}}" onclick="event.preventDefault();

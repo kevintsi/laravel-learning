@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Posts;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -19,9 +20,19 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+
+        $request->validated($request->rules());
+
+
+        $post = new Posts([
+            'content' => $request->content,
+        ]);
+
+        $request->user()->posts()->save($post);
+
+        return redirect(route("blog", ["id" => $request->user()->id]));
     }
 
     /**
