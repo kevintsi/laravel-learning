@@ -11,7 +11,7 @@ class Posts extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ["content", "user_id"];
+    protected $fillable = ["content"];
 
     public function user(): BelongsTo
     {

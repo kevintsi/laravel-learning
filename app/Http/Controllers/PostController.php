@@ -56,6 +56,8 @@ class PostController extends Controller
      */
     public function destroy(Posts $posts)
     {
-        //
+        $posts->delete();
+
+        return back();
     }
 }
