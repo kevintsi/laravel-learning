@@ -17,6 +17,8 @@ Route::get('/blog/{id}/posts', function (string $id) {
 
 Route::middleware("auth")->group(function () {
     Route::post('/blog/post', [PostController::class, 'store'])->name("post.store");
+    Route::get('/blog/post/{id}', [PostController::class, 'update_page'])->name("post.update.page");
+    Route::put('/blog/post/{posts}', [PostController::class, 'update'])->name("post.update");
     Route::delete('/blog/post/{posts}', [PostController::class, 'destroy'])->name("post.delete");
 });
 // Route::get('/testAPI', function () {

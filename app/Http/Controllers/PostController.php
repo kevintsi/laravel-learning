@@ -17,17 +17,17 @@ class PostController extends Controller
         //
     }
 
+    public function __construct(private Posts $postModel)
+    {
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(PostRequest $request)
     {
-
-        $request->validated($request->rules());
-
-
-        $post = new Posts([
-            'content' => $request->content,
+        $post = new $this->postModel([
+            'content' => $request->content
         ]);
 
         $request->user()->posts()->save($post);
@@ -43,12 +43,31 @@ class PostController extends Controller
         //
     }
 
+    public function update_page(Request $request, string $id)
+    {
+        $post = Posts::find($id);
+        if (!$post) {
+            return back();
+        }
+
+        if ($request->user()->id != $post->user->id) {
+            return back();
+        } else {
+            return view("post-update", ["post" => $post]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Posts $posts)
+    public function update(PostRequest $request, Posts $posts)
     {
-        //
+        $posts->update([
+            "content" => $request->content,
+            "updated_at" => time()
+        ]);
+
+        return redirect(route("blog",  ["id" => $request->user()->id]));
     }
 
     /**
