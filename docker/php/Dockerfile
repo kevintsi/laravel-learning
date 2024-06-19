@@ -1,6 +1,8 @@
 # Dockerfile
 FROM php:8.2-fpm
 
+ARG user
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -30,15 +32,14 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create system user to run Composer and Artisan Commands
-# RUN useradd -G www-data,root -d /home/$user $user
-# RUN mkdir -p /home/$user/.composer && \
-#     chown -R $user:$user /home/$user
+RUN useradd -G www-data,root -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 
 # Set working directory
 WORKDIR /var/www
 
 # Change current user to www
-# USER $user
+USER $user
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

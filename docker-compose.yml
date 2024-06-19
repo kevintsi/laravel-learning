@@ -3,8 +3,8 @@ version: '3.8'
 services:
   app:
     build:
-      # args:
-      #   - user=kev
+      args:
+        - user=kev
       context: .
       dockerfile: ./docker/php/Dockerfile
     container_name: blog_app
