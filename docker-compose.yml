@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      # args:
+      #   - user=kev
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: blog_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - laravel
+
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    container_name: blog_web
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: blog_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    volumes:
+      - /database/data:/var/lib/mysql
+    networks:
+      - laravel
+  # npm:
+  #   image: node:18
+  #   container_name: blog_npm
+  #   working_dir: /var/www
+  #   volumes:
+  #     - ./:/var/www
+  #   command: [ "npm", "run", "dev" ]
+  #   networks:
+  #     - laravel
+
+networks:
+  laravel:

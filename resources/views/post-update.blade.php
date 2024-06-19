@@ -1,7 +1,9 @@
 @props(['post'])
+
 @php
     $hasErrors = $errors->any();
 @endphp
+
 <x-app-layout>
     <h1 class="text-center text-2xl font-bold p-4">Mise à jour du post</h1>
 

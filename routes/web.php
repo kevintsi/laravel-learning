@@ -10,17 +10,20 @@ Route::get('/', function () {
     return view('welcome', ["posts" => $posts]);
 })->name("home");
 
-Route::get('/blog/{id}/posts', function (string $id) {
-    $posts = Posts::all()->where("user_id", "==", $id)->sortByDesc("updated_at");
-    return view("blog", ["id" => $id, "posts" => $posts]);
-})->name("blog");
+Route::prefix("blog")->group(function () {
+    Route::get('/{id}/posts', function (string $id) {
+        $posts = Posts::all()->where("user_id", "==", $id)->sortByDesc("updated_at");
+        return view("blog", ["id" => $id, "posts" => $posts]);
+    })->name("blog");
 
-Route::middleware("auth")->group(function () {
-    Route::post('/blog/post', [PostController::class, 'store'])->name("post.store");
-    Route::get('/blog/post/{id}', [PostController::class, 'update_page'])->name("post.update.page");
-    Route::put('/blog/post/{posts}', [PostController::class, 'update'])->name("post.update");
-    Route::delete('/blog/post/{posts}', [PostController::class, 'destroy'])->name("post.delete");
+    Route::middleware("auth")->prefix("post")->group(function () {
+        Route::post('', [PostController::class, 'store'])->name("post.store");
+        Route::get('/{id}', [PostController::class, 'update_page'])->name("post.update.page");
+        Route::put('/{posts}', [PostController::class, 'update'])->name("post.update");
+        Route::delete('/{posts}', [PostController::class, 'destroy'])->name("post.delete");
+    });
 });
+
 // Route::get('/testAPI', function () {
 //     return response()->json([
 //         "response" => "Salut"
